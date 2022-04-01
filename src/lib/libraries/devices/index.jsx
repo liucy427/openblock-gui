@@ -297,7 +297,7 @@ const deviceData = [
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp', 'microPython'],
-        tags: ['arduino'],
+        tags: ['arduino', 'microPython'],
         helpLink: 'https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/hw-reference/esp32/get-started-devkitc.html'
     },
     {
