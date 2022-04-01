@@ -265,10 +265,10 @@ const deviceData = [
     },
     {
         name: 'ESP32',
-        deviceId: 'arduinoEsp32',
+        deviceId: '$(type)Esp32',
         manufactor: 'espressif',
         learnMore: 'https://www.espressif.com/',
-        type: 'arduino',
+        typeList: ['arduino', 'microPython'],
         iconURL: esp32IconURL,
         description: (
             <FormattedMessage
@@ -296,7 +296,7 @@ const deviceData = [
         ),
         baseToolBoxXml: arduinoBaseToolBox,
         programMode: ['upload'],
-        programLanguage: ['block', 'c', 'cpp'],
+        programLanguage: ['block', 'c', 'cpp', 'microPython'],
         tags: ['arduino'],
         helpLink: 'https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/hw-reference/esp32/get-started-devkitc.html'
     },
@@ -370,7 +370,7 @@ const deviceData = [
         ),
         baseToolBoxXml: microbitBaseToolBox,
         programMode: ['upload'],
-        programLanguage: ['block', 'python'],
+        programLanguage: ['block', 'microPython'],
         tags: ['microPython'],
         helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
     },
@@ -407,7 +407,7 @@ const deviceData = [
         ),
         baseToolBoxXml: microbitBaseToolBox,
         programMode: ['upload'],
-        programLanguage: ['block', 'python'],
+        programLanguage: ['block', 'microPython'],
         tags: ['microPython'],
         helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
     },
@@ -480,16 +480,18 @@ const analysisRealDeviceId = deviceId => {
  * Make device data from the input data. If it is a buid-in device, return the buid-in
  * data. If it is a third party device, find it's parent device, and overwrite its attributes
  * with the input data.
- * @param {string} data - the data of devices.
+ * @param {string} deviceList - the list of devices.
  * @return {string} fullData - processed data of devices.
  */
-const makeDeviceLibrary = data => {
-    const fullData = data
-        .map(dev => {
-        // Check if this is a build-in device.
+const makeDeviceLibrary = (deviceList = null) => {
+    let regeneratedDeviceData = [];
+
+    if (deviceList) {
+        deviceList.forEach(dev => {
+            // Check if this is a build-in device.
             const matchedDevice = deviceData.find(item => dev.deviceId === item.deviceId);
             if (matchedDevice) {
-                return matchedDevice;
+                return regeneratedDeviceData.push(matchedDevice);
             }
 
             // This is a third party device. Try to parse it's parent deivce.
@@ -497,17 +499,35 @@ const makeDeviceLibrary = data => {
             if (realDeviceId) {
                 const parentDevice = deviceData.find(item => realDeviceId === item.deviceId);
                 if (parentDevice) {
-                    return defaultsDeep({}, dev, {hide: false}, parentDevice);
+                    return regeneratedDeviceData.push(defaultsDeep({}, dev, {hide: false}, parentDevice));
                 }
             }
             log.warn('Cannot find this device or it\'s parent device :', dev.deviceId);
             return null;
-        })
-        .filter(dev => dev); // filter null data.
+        });
 
-    fullData.unshift(deviceData[0]); // add unselect deive in the head.
+        regeneratedDeviceData.unshift(deviceData[0]); // add unselect deive in the head.
+    } else {
+        regeneratedDeviceData = deviceData;
+    }
 
-    return fullData;
+    // Expand the list of devices with multi-type, split them and generate hidden data
+    const expandedDeviceData = [];
+    regeneratedDeviceData.forEach(item => {
+        if (item.typeList && item.typeList.length > 0){
+            item.typeList.forEach(type => {
+                const newDevice = defaultsDeep({}, item);
+                newDevice.deviceId = item.deviceId.replace('$(type)', type);
+                newDevice.typeList = null;
+                newDevice.type = type;
+                newDevice.hide = true;
+                expandedDeviceData.push(newDevice);
+            });
+        }
+        expandedDeviceData.push(item);
+    });
+
+    return expandedDeviceData;
 };
 
 export {

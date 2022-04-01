@@ -14,6 +14,9 @@ import {makeDeviceLibrary} from '../lib/libraries/devices/index.jsx';
 import LibraryComponent from '../components/library/library.jsx';
 import deviceIcon from '../components/action-menu/icon--sprite.svg';
 
+import DeviceTypeModalComponent from '../components/device-type-modal/device-type-modal.jsx';
+import {openDeviceTypeModal, closeDeviceTypeModal} from '../reducers/modals';
+
 const messages = defineMessages({
     deviceTitle: {
         defaultMessage: 'Choose an Device',
@@ -51,24 +54,31 @@ class DeviceLibrary extends React.PureComponent {
     constructor (props) {
         super(props);
         bindAll(this, [
-            'handleItemSelect'
+            'handleDeviceTypeSelected',
+            'handleItemSelect',
+            'requestLoadDevice'
         ]);
+
+        this.state = {
+            device: null
+        };
     }
     componentDidMount () {
         this.props.vm.extensionManager.getDeviceList().then(data => {
-            if (data) {
-                this.props.onSetDeviceData(makeDeviceLibrary(data));
-            }
-        });
+            this.props.onSetDeviceData(makeDeviceLibrary(data));
+        })
+            .catch(() => {
+                this.props.onSetDeviceData(makeDeviceLibrary());
+            });
     }
 
-    handleItemSelect (item) {
-        const id = item.deviceId;
-        const deviceType = item.type;
-        const pnpidList = item.pnpidList;
-        const deviceExtensions = item.deviceExtensions;
+    requestLoadDevice (device) {
+        const id = device.deviceId;
+        const deviceType = device.type;
+        const pnpidList = device.pnpidList;
+        const deviceExtensions = device.deviceExtensions;
 
-        if (id && !item.disabled) {
+        if (id && !device.disabled) {
             if (this.props.vm.extensionManager.isDeviceLoaded(id)) {
                 this.props.onDeviceSelected(id);
             } else {
@@ -90,6 +100,30 @@ class DeviceLibrary extends React.PureComponent {
         }
     }
 
+    handleItemSelect (item) {
+        // Detect whether the device id contains $(type), if it does,
+        // it means that it is a multi-programming type supported device
+        if (item.typeList && item.typeList.length > 1) {
+            this.props.onOpenDeviceTypeModal();
+            this.setState({device: item});
+        } else {
+            this.requestLoadDevice(item);
+            this.props.onRequestClose();
+        }
+    }
+
+    handleDeviceTypeSelected (e) {
+        const type = e.currentTarget.id;
+
+        const device = this.state.device;
+        device.type = type;
+        device.deviceId = device.deviceId.replace(`$(type)`, type);
+
+        this.requestLoadDevice(device);
+        this.props.onCloseDeviceTypeModal();
+        this.props.onRequestClose();
+    }
+
     render () {
         const deviceLibraryThumbnailData = this.props.deviceData.map(device => ({
             rawURL: device.iconURL || deviceIcon,
@@ -97,36 +131,54 @@ class DeviceLibrary extends React.PureComponent {
         }));
 
         return (
-            <LibraryComponent
-                data={deviceLibraryThumbnailData}
-                filterable
-                tags={tagListPrefix}
-                id="deviceLibrary"
-                title={this.props.intl.formatMessage(messages.deviceTitle)}
-                visible={this.props.visible}
-                onItemSelected={this.handleItemSelect}
-                onRequestClose={this.props.onRequestClose}
-            />
+            <React.Fragment>
+                <LibraryComponent
+                    autoClose={false}
+                    data={deviceLibraryThumbnailData}
+                    filterable
+                    tags={tagListPrefix}
+                    id="deviceLibrary"
+                    title={this.props.intl.formatMessage(messages.deviceTitle)}
+                    onItemSelected={this.handleItemSelect}
+                    onRequestClose={this.props.onRequestClose}
+                />
+                {this.props.deviceTypeModalVisible ? (
+                    <DeviceTypeModalComponent
+                        deviceTypeList={this.state.device.typeList}
+                        onCancel={this.props.onCloseDeviceTypeModal}
+                        onItemSelected={this.handleDeviceTypeSelected}
+                    />
+                ) : null}
+            </React.Fragment>
         );
     }
 }
 
 DeviceLibrary.propTypes = {
     deviceData: PropTypes.instanceOf(Array).isRequired,
+    deviceTypeModalVisible: PropTypes.bool.isRequired,
     intl: intlShape.isRequired,
     onDeviceSelected: PropTypes.func,
     onRequestClose: PropTypes.func,
+    onOpenDeviceTypeModal: PropTypes.func.isRequired,
+    onCloseDeviceTypeModal: PropTypes.func.isRequired,
     onSetDeviceData: PropTypes.func.isRequired,
-    visible: PropTypes.bool,
     vm: PropTypes.instanceOf(VM).isRequired // eslint-disable-line react/no-unused-prop-types
 };
 
 const mapStateToProps = state => ({
-    deviceData: state.scratchGui.deviceData.deviceData
+    deviceData: state.scratchGui.deviceData.deviceData,
+    deviceTypeModalVisible: state.scratchGui.modals.deviceTypeModal
 });
 
 const mapDispatchToProps = dispatch => ({
-    onSetDeviceData: data => dispatch(setDeviceData(data))
+    onSetDeviceData: data => dispatch(setDeviceData(data)),
+    onOpenDeviceTypeModal: () => {
+        dispatch(openDeviceTypeModal());
+    },
+    onCloseDeviceTypeModal: () => {
+        dispatch(closeDeviceTypeModal());
+    }
 });
 
 export default compose(

@@ -13,6 +13,7 @@ const MODAL_CONNECTION = 'connectionModal';
 const MODAL_TIPS_LIBRARY = 'tipsLibrary';
 const MODAL_UPLOAD_PROGRESS = 'uploadProgress';
 const MODAL_DEVICE_LIBRARY = 'deviceLibrary';
+const MODAL_DEVICE_TYPE = 'deviceTypeModal';
 const MODAL_UPDATE = 'updateModal';
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
     [MODAL_CONNECTION]: false,
     [MODAL_UPLOAD_PROGRESS]: false,
     [MODAL_DEVICE_LIBRARY]: false,
+    [MODAL_DEVICE_TYPE]: false,
     [MODAL_TIPS_LIBRARY]: false,
     [MODAL_UPDATE]: false
 };
@@ -91,6 +93,9 @@ const openUploadProgress = function () {
 const openDeviceLibrary = function () {
     return openModal(MODAL_DEVICE_LIBRARY);
 };
+const openDeviceTypeModal = function () {
+    return openModal(MODAL_DEVICE_TYPE);
+};
 const openTipsLibrary = function () {
     return openModal(MODAL_TIPS_LIBRARY);
 };
@@ -133,6 +138,9 @@ const closeUploadProgress = function () {
 const closeDeviceLibrary = function () {
     return closeModal(MODAL_DEVICE_LIBRARY);
 };
+const closeDeviceTypeModal = function () {
+    return closeModal(MODAL_DEVICE_TYPE);
+};
 const closeUpdateModal = function () {
     return closeModal(MODAL_UPDATE);
 };
@@ -140,7 +148,10 @@ export {
     reducer as default,
     initialState as modalsInitialState,
     openBackdropLibrary,
+    openConnectionModal,
     openCostumeLibrary,
+    openDeviceLibrary,
+    openDeviceTypeModal,
     openExtensionLibrary,
     openLoadingProject,
     openSoundLibrary,
@@ -148,13 +159,13 @@ export {
     openSoundRecorder,
     openTelemetryModal,
     openTipsLibrary,
-    openConnectionModal,
     openUploadProgress,
-    openDeviceLibrary,
     openUpdateModal,
     closeBackdropLibrary,
+    closeConnectionModal,
     closeCostumeLibrary,
     closeDeviceLibrary,
+    closeDeviceTypeModal,
     closeExtensionLibrary,
     closeLoadingProject,
     closeSpriteLibrary,
@@ -162,7 +173,6 @@ export {
     closeSoundRecorder,
     closeTelemetryModal,
     closeTipsLibrary,
-    closeConnectionModal,
     closeUploadProgress,
     closeUpdateModal
 };
