@@ -74,6 +74,7 @@ class HardwareConsole extends React.Component {
             'handleClickPause',
             'handleClickSend',
             'handleInputChange',
+            'handleKeyPress',
             'handleSelectBaudrate',
             'handleSelectEol',
             'onReciveData'
@@ -136,6 +137,13 @@ class HardwareConsole extends React.Component {
 
     handleClickPause () {
         this.props.onSwitchPause();
+    }
+
+    handleKeyPress (e) {
+        // User pressed enter
+        if (e.which === 13) {
+            this.handleClickSend();
+        }
     }
 
     handleInputChange (e) {
@@ -206,6 +214,7 @@ class HardwareConsole extends React.Component {
                 onClickHexForm={this.handleClickHexForm}
                 onClickSend={this.handleClickSend}
                 onClickSerialportMenu={this.props.handleClickSerialportMenu}
+                onKeyPress={this.handleKeyPress}
                 onInputChange={this.handleInputChange}
                 onRequestSerialportMenu={this.props.handleRequestSerialportMenu}
                 onSelectBaudrate={this.handleSelectBaudrate}
