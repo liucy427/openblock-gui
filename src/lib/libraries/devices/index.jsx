@@ -45,9 +45,13 @@ import esp8266IconURL from './esp8266/esp8266.png';
 import esp8266ConnectionIconURL from './esp8266/esp8266-illustration.svg';
 import esp8266ConnectionSmallIconURL from './esp8266/esp8266-small.svg';
 
-import k210MaixAmigoIconURL from './k210MaixAmigo/k210MaixAmigo.png';
-import k210MaixAmigoConnectionIconURL from './k210MaixAmigo/k210MaixAmigo-illustration.svg';
-import k210MaixAmigoConnectionSmallIconURL from './k210MaixAmigo/k210MaixAmigo-small.svg';
+import maixduinoIconURL from './maixduino/maixduino.png';
+import maixduinoConnectionIconURLL from './maixduino/maixduino-illustration.svg';
+import maixduinoConnectionSmallIconURL from './maixduino/maixduino-small.svg';
+
+import maixAmigoIconURL from './maixAmigo/maixAmigo.png';
+import maixAmigoConnectionIconURL from './maixAmigo/maixAmigo-illustration.svg';
+import maixAmigoConnectionSmallIconURL from './maixAmigo/maixAmigo-small.svg';
 
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
@@ -421,17 +425,17 @@ const deviceData = [
         helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
     },
     {
-        name: 'Maix Amigo',
-        deviceId: 'microPythonK210MaixAmigo',
+        name: 'Maixduino',
+        deviceId: '$(type)K210Maixduino',
         manufactor: 'sipeed',
-        learnMore: 'https://wiki.sipeed.com/soft/maixpy/en/index.html',
-        type: 'microPython',
-        iconURL: k210MaixAmigoIconURL,
+        leanMore: 'https://maixduino.sipeed.com/',
+        typeList: ['arduino', 'microPython'],
+        iconURL: maixduinoIconURL,
         description: (
             <FormattedMessage
-                defaultMessage="Based on K210 chip, it integrates front and rear 30W pixel cameras, expandable TF card slot, user buttons, 3.5' TFT-inch display, 520mAh lithium battery, speakers, microphone, etc." // eslint-disable-line max-len
-                description="Description for the maix amigo device"
-                id="gui.device.k210MaixAmigo.description"
+                defaultMessage="The K210 RISC-V board with ESP32 inside"
+                description="Description for the maixduino device"
+                id="gui.device.maixduino.description"
             />
         ),
         featured: true,
@@ -442,8 +446,45 @@ const deviceData = [
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: false,
-        connectionIconURL: k210MaixAmigoConnectionIconURL,
-        connectionSmallIconURL: k210MaixAmigoConnectionSmallIconURL,
+        connectionIconURL: maixduinoConnectionIconURLL,
+        connectionSmallIconURL: maixduinoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: '$(type)BaseToolBox',
+        programMode: ['upload'],
+        programLanguage: ['block', 'c', 'cpp', 'microPython'],
+        tags: ['microPython'],
+        helpLink: 'https://wiki.sipeed.com/soft/maixpy/en/develop_kit_board/maix_duino.html'
+    },
+    {
+        name: 'Maix Amigo',
+        deviceId: 'microPythonMaixAmigo',
+        manufactor: 'sipeed',
+        learnMore: 'https://wiki.sipeed.com/soft/maixpy/en/index.html',
+        type: 'microPython',
+        iconURL: maixAmigoIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Based on K210 chip, it integrates front and rear 30W pixel cameras, expandable TF card slot, user buttons, 3.5' TFT-inch display, 520mAh lithium battery, speakers, microphone, etc." // eslint-disable-line max-len
+                description="Description for the maix amigo device"
+                id="gui.device.maixAmigo.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '115200',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: maixAmigoConnectionIconURL,
+        connectionSmallIconURL: maixAmigoConnectionSmallIconURL,
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
@@ -573,6 +614,8 @@ const makeDeviceLibrary = (deviceList = null) => {
         }
         expandedDeviceData.push(item);
     });
+
+    // TODO 单独启动的设备，没有设备列表，需要添加到设备列表中
 
     return expandedDeviceData;
 };
