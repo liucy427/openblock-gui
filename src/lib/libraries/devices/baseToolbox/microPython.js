@@ -367,7 +367,7 @@ const events = function (isInitialSetup, isStage, targetId, isRealtimeMode) {
                 </value>
             </block>
         ` : `
-            <block type="event_whenmicropythonbegin"/>
+            <block type="event_whenmicrobitbegin"/>
         `}
         ${categorySeparator}
     </category>

@@ -45,6 +45,10 @@ import esp8266IconURL from './esp8266/esp8266.png';
 import esp8266ConnectionIconURL from './esp8266/esp8266-illustration.svg';
 import esp8266ConnectionSmallIconURL from './esp8266/esp8266-small.svg';
 
+import k210MaixAmigoIconURL from './k210MaixAmigo/k210MaixAmigo.png';
+import k210MaixAmigoConnectionIconURL from './k210MaixAmigo/k210MaixAmigo-illustration.svg';
+import k210MaixAmigoConnectionSmallIconURL from './k210MaixAmigo/k210MaixAmigo-small.svg';
+
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
@@ -107,8 +111,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
@@ -145,8 +149,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
@@ -184,8 +188,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
@@ -221,8 +225,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
@@ -258,8 +262,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
@@ -295,8 +299,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their esp32."
-                id="gui.device.arduinoEsp32.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: '$(type)BaseToolBox',
@@ -307,10 +311,10 @@ const deviceData = [
     },
     {
         name: 'ESP8266',
-        deviceId: 'arduinoEsp8266',
+        deviceId: '$(type)Esp8266',
         manufactor: 'espressif',
         learnMore: 'https://www.espressif.com/',
-        type: 'arduino',
+        typeList: ['arduino', 'microPython'],
         iconURL: esp8266IconURL,
         description: (
             <FormattedMessage
@@ -323,7 +327,7 @@ const deviceData = [
         disabled: false,
         bluetoothRequired: false,
         serialportRequired: true,
-        defaultBaudRate: '76800',
+        defaultBaudRate: '115200',
         internetConnectionRequired: false,
         launchPeripheralConnectionFlow: true,
         useAutoScan: false,
@@ -332,13 +336,13 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their esp8266."
-                id="gui.device.arduinoEsp8266.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
-        baseToolBoxXml: arduinoBaseToolBox,
+        baseToolBoxXml: '$(type)BaseToolBox',
         programMode: ['upload'],
-        programLanguage: ['block', 'c', 'cpp'],
+        programLanguage: ['block', 'c', 'cpp', 'microPython'],
         tags: ['arduino'],
         helpLink: 'https://arduino-esp8266.readthedocs.io/en/3.0.0/index.html'
     },
@@ -352,7 +356,7 @@ const deviceData = [
         description: (
             <FormattedMessage
                 defaultMessage="The pocket-sized computer transforming digital skills learning."
-                description="Description for the 'micro:bit' device"
+                description="Description for the micro:bit device"
                 id="gui.device.microbit.description"
             />
         ),
@@ -369,8 +373,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their microbit."
-                id="gui.device.microbit.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: microbitBaseToolBox,
@@ -389,7 +393,7 @@ const deviceData = [
         description: (
             <FormattedMessage
                 defaultMessage="Upgraded processor, built-In speaker and microphone, touch sensitive logo."
-                description="Description for the 'micro:bit V2' device"
+                description="Description for the micro:bit V2 device"
                 id="gui.device.microbitV2.description"
             />
         ),
@@ -406,8 +410,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their microbit."
-                id="gui.device.microbit.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: microbitBaseToolBox,
@@ -415,6 +419,43 @@ const deviceData = [
         programLanguage: ['block', 'microPython'],
         tags: ['microPython'],
         helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
+    },
+    {
+        name: 'Maix Amigo',
+        deviceId: 'microPythonK210MaixAmigo',
+        manufactor: 'sipeed',
+        learnMore: 'https://wiki.sipeed.com/soft/maixpy/en/index.html',
+        type: 'microPython',
+        iconURL: k210MaixAmigoIconURL,
+        description: (
+            <FormattedMessage
+                defaultMessage="Based on K210 chip, it integrates front and rear 30W pixel cameras, expandable TF card slot, user buttons, 3.5' TFT-inch display, 520mAh lithium battery, speakers, microphone, etc." // eslint-disable-line max-len
+                description="Description for the maix amigo device"
+                id="gui.device.k210MaixAmigo.description"
+            />
+        ),
+        featured: true,
+        disabled: false,
+        bluetoothRequired: false,
+        serialportRequired: true,
+        defaultBaudRate: '115200',
+        internetConnectionRequired: false,
+        launchPeripheralConnectionFlow: true,
+        useAutoScan: false,
+        connectionIconURL: k210MaixAmigoConnectionIconURL,
+        connectionSmallIconURL: k210MaixAmigoConnectionSmallIconURL,
+        connectingMessage: (
+            <FormattedMessage
+                defaultMessage="Connecting"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
+            />
+        ),
+        baseToolBoxXml: microbitBaseToolBox,
+        programMode: ['upload'],
+        programLanguage: ['block', 'microPython'],
+        tags: ['microPython'],
+        helpLink: 'https://wiki.sipeed.com/soft/maixpy/en/develop_kit_board/maix_amigo.html'
     },
     {
         name: 'Makey Makey',
@@ -443,8 +484,8 @@ const deviceData = [
         connectingMessage: (
             <FormattedMessage
                 defaultMessage="Connecting"
-                description="Message to help people connect to their arduino."
-                id="gui.device.arduino.connectingMessage"
+                description="Message to help people connect to their device."
+                id="gui.device.connectingMessage"
             />
         ),
         baseToolBoxXml: arduinoBaseToolBox,
