@@ -4,6 +4,7 @@ import defaultsDeep from 'lodash.defaultsdeep';
 import log from '../../log';
 
 import arduinoBaseToolBox from './baseToolbox/arduino';
+import microPythonBaseToolBox from './baseToolbox/microPython';
 import microbitBaseToolBox from './baseToolbox/microbit';
 
 import unselectDeviceIconURL from './unselectDevice/unselectDevice.png';
@@ -47,6 +48,10 @@ import esp8266ConnectionSmallIconURL from './esp8266/esp8266-small.svg';
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
+
+const baseToolbox = {};
+baseToolbox.arduinoBaseToolBox = arduinoBaseToolBox;
+baseToolbox.microPythonBaseToolBox = microPythonBaseToolBox;
 
 const deviceData = [
     /**
@@ -294,7 +299,7 @@ const deviceData = [
                 id="gui.device.arduinoEsp32.connectingMessage"
             />
         ),
-        baseToolBoxXml: arduinoBaseToolBox,
+        baseToolBoxXml: '$(type)BaseToolBox',
         programMode: ['upload'],
         programLanguage: ['block', 'c', 'cpp', 'microPython'],
         tags: ['arduino', 'microPython'],
@@ -518,6 +523,7 @@ const makeDeviceLibrary = (deviceList = null) => {
             item.typeList.forEach(type => {
                 const newDevice = defaultsDeep({}, item);
                 newDevice.deviceId = item.deviceId.replace('$(type)', type);
+                newDevice.baseToolBoxXml = baseToolbox[`${item.baseToolBoxXml.replace('$(type)', type)}`];
                 newDevice.typeList = null;
                 newDevice.type = type;
                 newDevice.hide = true;
