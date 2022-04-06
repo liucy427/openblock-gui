@@ -512,6 +512,7 @@ class Blocks extends React.Component {
         if (device) {
             const dev = this.props.deviceData.find(ext => ext.deviceId === device);
             this.props.onDeviceSelected(dev.deviceId, dev.name, dev.type);
+            this.ScratchBlocks.Device.setDevice(dev.deviceId, dev.type);
             if (dev.defaultBaudRate) {
                 this.props.onSetBaudrate(dev.defaultBaudRate);
             }
