@@ -14,8 +14,8 @@ import styles from './device-type-modal.css';
 
 const messages = defineMessages({
     deviceTypeTitle: {
-        defaultMessage: 'Choose a Programming Language',
-        description: 'Title for the modal where you choose a programming language.',
+        defaultMessage: 'Choose a Programming Type',
+        description: 'Title for the modal where you choose a programming type.',
         id: 'gui.deviceTypeModal.deviceTypeTitle'
     }
 });
