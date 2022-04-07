@@ -117,7 +117,7 @@ class DeviceLibrary extends React.PureComponent {
 
         const device = this.state.device;
         device.type = type;
-        device.deviceId = device.deviceId.replace(`$(type)`, type);
+        device.deviceId = type + device.deviceId.replace(device.deviceId[0], device.deviceId[0].toUpperCase());
 
         this.requestLoadDevice(device);
         this.props.onCloseDeviceTypeModal();

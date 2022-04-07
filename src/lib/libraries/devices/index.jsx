@@ -2,6 +2,8 @@ import React from 'react';
 import {FormattedMessage} from 'react-intl';
 import defaultsDeep from 'lodash.defaultsdeep';
 import log from '../../log';
+import {DeviceType} from '../../device';
+
 
 import arduinoBaseToolBox from './baseToolbox/arduino';
 import microPythonBaseToolBox from './baseToolbox/microPython';
@@ -37,18 +39,6 @@ import microbitV2IconURL from './microbitV2/microbitV2.png';
 import microbitV2ConnectionIconURLL from './microbitV2/microbitV2-illustration.svg';
 import microbitV2ConnectionSmallIconURL from './microbitV2/microbitV2-small.svg';
 
-import esp32IconURL from './esp32/esp32.png';
-import esp32ConnectionIconURLL from './esp32/esp32-illustration.svg';
-import esp32ConnectionSmallIconURL from './esp32/esp32-small.svg';
-
-import esp8266IconURL from './esp8266/esp8266.png';
-import esp8266ConnectionIconURL from './esp8266/esp8266-illustration.svg';
-import esp8266ConnectionSmallIconURL from './esp8266/esp8266-small.svg';
-
-import maixduinoIconURL from './maixduino/maixduino.png';
-import maixduinoConnectionIconURLL from './maixduino/maixduino-illustration.svg';
-import maixduinoConnectionSmallIconURL from './maixduino/maixduino-small.svg';
-
 import maixAmigoIconURL from './maixAmigo/maixAmigo.png';
 import maixAmigoConnectionIconURL from './maixAmigo/maixAmigo-illustration.svg';
 import maixAmigoConnectionSmallIconURL from './maixAmigo/maixAmigo-small.svg';
@@ -56,6 +46,10 @@ import maixAmigoConnectionSmallIconURL from './maixAmigo/maixAmigo-small.svg';
 import makeymakeyIconURL from './makeymakey/makeymakey.png';
 import makeymakeyConnectionIconURL from './makeymakey/makeymakey-illustration.svg';
 import makeymakeyConnectionSmallIconURL from './makeymakey/makeymakey-small.svg';
+
+import {esp32, arduinoEsp32, microPythonEsp32} from './esp32/index.jsx';
+import {esp8266, arduinoEsp8266, microPythonEsp8266} from './esp8266/index.jsx';
+import {maixduino, arduinoMaixduino, microPythonMaixduino} from './maixduino/index.jsx';
 
 const baseToolbox = {};
 baseToolbox.arduinoBaseToolBox = arduinoBaseToolBox;
@@ -93,7 +87,7 @@ const deviceData = [
         deviceId: 'arduinoUno',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-uno-rev3',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: arduinoUnoIconURL,
         description: (
             <FormattedMessage
@@ -131,7 +125,7 @@ const deviceData = [
         deviceExtensionsCompatible: 'arduinoUno',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/arduino-nano',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: arduinoNanoIconURL,
         description: (
             <FormattedMessage
@@ -170,7 +164,7 @@ const deviceData = [
         manufactor: 'arduino.cc',
         // Discontinued board
         // learnMore: 'https://store.arduino.cc/usa/arduino/boards-modules',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: arduinoMiniIconURL,
         description: (
             <FormattedMessage
@@ -207,7 +201,7 @@ const deviceData = [
         deviceId: 'arduinoLeonardo',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/leonardo',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: arduinoLeonardoIconURL,
         description: (
             <FormattedMessage
@@ -244,7 +238,7 @@ const deviceData = [
         deviceId: 'arduinoMega2560',
         manufactor: 'arduino.cc',
         learnMore: 'https://store.arduino.cc/usa/mega-2560-r3',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: arduinoMega2560IconURL,
         description: (
             <FormattedMessage
@@ -276,86 +270,18 @@ const deviceData = [
         tags: ['arduino'],
         helpLink: 'https://store.arduino.cc/usa/mega-2560-r3'
     },
-    {
-        name: 'ESP32',
-        deviceId: '$(type)Esp32',
-        manufactor: 'espressif',
-        learnMore: 'https://www.espressif.com/',
-        typeList: ['arduino', 'microPython'],
-        iconURL: esp32IconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Wi-Fi & Bluetooth control board with rich functions."
-                description="Description for the esp32 device"
-                id="gui.device.arduinoEsp32.description"
-            />
-        ),
-        featured: true,
-        disabled: false,
-        bluetoothRequired: false,
-        serialportRequired: true,
-        defaultBaudRate: '115200',
-        internetConnectionRequired: false,
-        launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
-        connectionIconURL: esp32ConnectionIconURLL,
-        connectionSmallIconURL: esp32ConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.connectingMessage"
-            />
-        ),
-        baseToolBoxXml: '$(type)BaseToolBox',
-        programMode: ['upload'],
-        programLanguage: ['block', 'c', 'cpp', 'microPython'],
-        tags: ['arduino', 'microPython'],
-        helpLink: 'https://docs.espressif.com/projects/esp-idf/zh_CN/latest/esp32/hw-reference/esp32/get-started-devkitc.html'
-    },
-    {
-        name: 'ESP8266',
-        deviceId: '$(type)Esp8266',
-        manufactor: 'espressif',
-        learnMore: 'https://www.espressif.com/',
-        typeList: ['arduino', 'microPython'],
-        iconURL: esp8266IconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="Low-cost Wi-Fi SOC control board."
-                description="Description for the esp8266 device"
-                id="gui.device.arduinoEsp8266.description"
-            />
-        ),
-        featured: true,
-        disabled: false,
-        bluetoothRequired: false,
-        serialportRequired: true,
-        defaultBaudRate: '115200',
-        internetConnectionRequired: false,
-        launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
-        connectionIconURL: esp8266ConnectionIconURL,
-        connectionSmallIconURL: esp8266ConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.connectingMessage"
-            />
-        ),
-        baseToolBoxXml: '$(type)BaseToolBox',
-        programMode: ['upload'],
-        programLanguage: ['block', 'c', 'cpp', 'microPython'],
-        tags: ['arduino'],
-        helpLink: 'https://arduino-esp8266.readthedocs.io/en/3.0.0/index.html'
-    },
+    esp32,
+    arduinoEsp32,
+    microPythonEsp32,
+    esp8266,
+    arduinoEsp8266,
+    microPythonEsp8266,
     {
         name: 'Micro:bit',
         deviceId: 'microbit',
         manufactor: 'microbit.org',
         learnMore: 'https://microbit.org/',
-        type: 'microbit',
+        type: DeviceType.microbit,
         iconURL: microbitIconURL,
         description: (
             <FormattedMessage
@@ -392,7 +318,7 @@ const deviceData = [
         deviceId: 'microbitV2',
         manufactor: 'microbit.org',
         learnMore: 'https://microbit.org/',
-        type: 'microbit',
+        type: DeviceType.microbit,
         iconURL: microbitV2IconURL,
         description: (
             <FormattedMessage
@@ -424,49 +350,15 @@ const deviceData = [
         tags: ['microPython'],
         helpLink: 'https://microbit.org/get-started/first-steps/introduction/'
     },
-    {
-        name: 'Maixduino',
-        deviceId: '$(type)K210Maixduino',
-        manufactor: 'sipeed',
-        leanMore: 'https://maixduino.sipeed.com/',
-        typeList: ['arduino', 'microPython'],
-        iconURL: maixduinoIconURL,
-        description: (
-            <FormattedMessage
-                defaultMessage="The K210 RISC-V board with ESP32 inside"
-                description="Description for the maixduino device"
-                id="gui.device.maixduino.description"
-            />
-        ),
-        featured: true,
-        disabled: false,
-        bluetoothRequired: false,
-        serialportRequired: true,
-        defaultBaudRate: '115200',
-        internetConnectionRequired: false,
-        launchPeripheralConnectionFlow: true,
-        useAutoScan: false,
-        connectionIconURL: maixduinoConnectionIconURLL,
-        connectionSmallIconURL: maixduinoConnectionSmallIconURL,
-        connectingMessage: (
-            <FormattedMessage
-                defaultMessage="Connecting"
-                description="Message to help people connect to their device."
-                id="gui.device.connectingMessage"
-            />
-        ),
-        baseToolBoxXml: '$(type)BaseToolBox',
-        programMode: ['upload'],
-        programLanguage: ['block', 'c', 'cpp', 'microPython'],
-        tags: ['microPython'],
-        helpLink: 'https://wiki.sipeed.com/soft/maixpy/en/develop_kit_board/maix_duino.html'
-    },
+    maixduino,
+    arduinoMaixduino,
+    microPythonMaixduino,
     {
         name: 'Maix Amigo',
         deviceId: 'microPythonMaixAmigo',
         manufactor: 'sipeed',
         learnMore: 'https://wiki.sipeed.com/soft/maixpy/en/index.html',
-        type: 'microPython',
+        type: DeviceType.microPython,
         iconURL: maixAmigoIconURL,
         description: (
             <FormattedMessage
@@ -503,7 +395,7 @@ const deviceData = [
         deviceId: 'makeyMakey',
         manufactor: 'makeymakey.com',
         learnMore: 'https://makeymakey.com/',
-        type: 'arduino',
+        type: DeviceType.arduino,
         iconURL: makeymakeyIconURL,
         description: (
             <FormattedMessage
@@ -540,7 +432,7 @@ const deviceData = [
      */
     {
         deviceId: 'arduinoUnoUltra',
-        type: 'arduino',
+        type: DeviceType.arduino,
         featured: true,
         disabled: false,
         hide: true,
@@ -598,26 +490,7 @@ const makeDeviceLibrary = (deviceList = null) => {
         regeneratedDeviceData = deviceData;
     }
 
-    // Expand the list of devices with multi-type, split them and generate hidden data
-    const expandedDeviceData = [];
-    regeneratedDeviceData.forEach(item => {
-        if (item.typeList && item.typeList.length > 0){
-            item.typeList.forEach(type => {
-                const newDevice = defaultsDeep({}, item);
-                newDevice.deviceId = item.deviceId.replace('$(type)', type);
-                newDevice.baseToolBoxXml = baseToolbox[`${item.baseToolBoxXml.replace('$(type)', type)}`];
-                newDevice.typeList = null;
-                newDevice.type = type;
-                newDevice.hide = true;
-                expandedDeviceData.push(newDevice);
-            });
-        }
-        expandedDeviceData.push(item);
-    });
-
-    // TODO 单独启动的设备，没有设备列表，需要添加到设备列表中
-
-    return expandedDeviceData;
+    return regeneratedDeviceData;
 };
 
 export {
