@@ -1,6 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 import {compose} from 'redux';
+import {FormattedMessage} from 'react-intl';
 
 import AppStateHOC from '../lib/app-state-hoc.jsx';
 import GUI from '../containers/gui.jsx';
@@ -16,8 +17,12 @@ const onClickCheckUpdate = () => {
     log('User click check update');
 };
 
-const onClickUpgrade = () => {
-    log('User click upgrade');
+const onClickUpdate = () => {
+    log('User click update');
+};
+
+const onAbortUpdate = () => {
+    log('User click abort update');
 };
 
 const onClickClearCache = () => {
@@ -42,15 +47,35 @@ const handleTelemetryModalOptOut = () => {
 
 const onClickAbout = [
     {
-        title: 'About',
+        title: (<FormattedMessage
+            defaultMessage="About"
+            description="Menu bar item for about"
+            id="gui.desktopMenuBar.about"
+        />),
         onClick: () => log('About')
     },
     {
-        title: 'Privacy Policy',
+        title: (<FormattedMessage
+            defaultMessage="License"
+            description="Menu bar item for license"
+            id="gui.desktopMenuBar.license"
+        />),
+        onClick: () => log('License')
+    },
+    {
+        title: (<FormattedMessage
+            defaultMessage="Privacy policy"
+            description="Menu bar item for privacy policy"
+            id="gui.menuBar.privacyPolicy"
+        />),
         onClick: () => log('Privacy Policy')
     },
     {
-        title: 'Data Settings',
+        title: (<FormattedMessage
+            defaultMessage="Data settings"
+            description="Menu bar item for data settings"
+            id="gui.menuBar.dataSettings"
+        />),
         onClick: () => log('Data Settings')
     }
 ];
@@ -113,8 +138,9 @@ export default appTarget => {
                 onTelemetryModalCancel={handleTelemetryModalCancel}
                 onTelemetryModalOptIn={handleTelemetryModalOptIn}
                 onTelemetryModalOptOut={handleTelemetryModalOptOut}
+                onAbortUpdate={onAbortUpdate}
                 onClickCheckUpdate={onClickCheckUpdate}
-                onClickUpgrade={onClickUpgrade}
+                onClickUpdate={onClickUpdate}
                 onClickClearCache={onClickClearCache}
                 onClickInstallDriver={onClickInstallDriver}
                 onShowMessageBox={handleShowMessageBox}
